@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Drawing;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using System.IO;
 
-namespace KeyboardTester
+namespace KeyTest
 {
-    public partial class Form1 : Form
+    class Program
     {
         #region CONST Defs.
 
@@ -52,7 +51,7 @@ namespace KeyboardTester
         private const uint ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
         private const uint DISABLE_NEWLINE_AUTO_RETURN = 0x0008;
 
-        #endregion
+        #endregion const definitions
 
         #region Dll Imports
 
@@ -72,13 +71,31 @@ namespace KeyboardTester
         [DllImport("user32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, EntryPoint = "MapVirtualKey", SetLastError = true, ThrowOnUnmappableChar = false)]
         private static extern uint MapVirtualKey(uint uCode, uint uMapType);
 
-        #endregion
+        // As odd as this is Windows command prompt does not
+        // seem to deal with ANSII escape sequences... why? I have no idea.
+        // Anyways after some digging around apparently Windows 10 ver ~ 1151 (correct me if I have this wrong)
+        // they did start adding support for this, but it's not enabled by default, so we have to enable it
+        // the following chunks of import / code do this.
+
+        [DllImport("kernel32.dll")]
+        private static extern bool GetConsoleMode(IntPtr hConsoleHandle, out uint lpMode);
+
+        [DllImport("kernel32.dll")]
+        private static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern IntPtr GetStdHandle(int nStdHandle);
+
+        [DllImport("kernel32.dll")]
+        public static extern uint GetLastError();
+
+        #endregion DllImports
 
 
         /// <summary>
         /// 
         /// </summary>
-        private LowLevelKeyboardProc _proc = null;
+        private static LowLevelKeyboardProc _proc = HookCallback;
 
         /// <summary>
         /// 
@@ -86,36 +103,46 @@ namespace KeyboardTester
         private static IntPtr _hookID = IntPtr.Zero;
 
         /// <summary>
-        /// Layout
+        /// 
         /// </summary>
-        //Keyboards._60Layout1 layout = new Keyboards._60Layout1();
-        Keyboards._100Layout1 layout = new Keyboards._100Layout1();
+        private static Stopwatch _keytimer = null;
+
 
         /// <summary>
-        /// Holds our key timer
+        /// 
         /// </summary>
-        System.Diagnostics.Stopwatch _keytimer = null;
-
-        public Form1()
+        /// <param name="args"></param>
+        static void Main(string[] args)
         {
-            _proc = HookCallback;
+            // setup
+            var iStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+            if (!GetConsoleMode(iStdOut, out uint outConsoleMode))
+            {
+                Console.WriteLine("failed to get output console mode");
+                Console.ReadKey();
+                return;
+            }
+
+            outConsoleMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING | DISABLE_NEWLINE_AUTO_RETURN;
+            if (!SetConsoleMode(iStdOut, outConsoleMode))
+            {
+                Console.WriteLine($"failed to set output console mode, error code: {GetLastError()}");
+                Console.ReadKey();
+                return;
+            }
+
             _hookID = SetHook(_proc);
-            
-            InitializeComponent();
-            KeyboardLoader();
-        }
-
-        ~Form1()
-        {
+            Application.Run();
             UnhookWindowsHookEx(_hookID);
         }
+
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="proc"></param>
         /// <returns></returns>
-        private IntPtr SetHook(LowLevelKeyboardProc proc)
+        private static IntPtr SetHook(LowLevelKeyboardProc proc)
         {
             using (Process curProcess = Process.GetCurrentProcess())
             using (ProcessModule curModule = curProcess.MainModule)
@@ -133,108 +160,35 @@ namespace KeyboardTester
         /// <param name="wParam"></param>
         /// <param name="lParam"></param>
         /// <returns></returns>
-        private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             // Key Down Event
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN)
             {
-
-                _keytimer = System.Diagnostics.Stopwatch.StartNew();
-
+                _keytimer = Stopwatch.StartNew();
                 int vkCode = Marshal.ReadInt32(lParam);
-                Keys k = (Keys)vkCode;
 
                 uint uCode = (uint)vkCode;
                 uint scanCode = MapVirtualKey(uCode, MAPVK_VK_TO_VSC);
 
-                _keytimer = System.Diagnostics.Stopwatch.StartNew();
-
-                for (int x = 0; x < layout.KeyLayout.Count; x++)
-                {
-                    if ((Keys)vkCode == layout.KeyLayout[x].CurrentKey)
-                    {
-                        layout.KeyLayout[x].Activate();
-                    }
-                }
-
-                txtLastKey.Text = k.ToString();
-                txtCode.Text = "0x" + vkCode.ToString("X2");
-                txtScanCode.Text = "0x" + scanCode.ToString("X2");
-
-                if (Main.DEBUG) Console.WriteLine("KEY-DOWN - vkCode: 0x{0}\tScan Code: 0x{2}\tKey: {1}", vkCode.ToString("X2"), (Keys)vkCode, scanCode.ToString("X2"));
+                Console.WriteLine("KEY-DOWN - vkCode: \u001b[33;1m0x{0}\u001b[0m\tScan Code: \u001b[33;1m0x{2}\u001b[0m\tKey: \u001b[33;1m{1}\u001b[0m", vkCode.ToString("X2"), (Keys)vkCode, scanCode.ToString("X2"));
             }
 
             // Key Up Event
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYUP)
             {
-                _keytimer.Stop();
-                txtPressedTime.Text = _keytimer.ElapsedMilliseconds.ToString() + " ms";
-
+                _keytimer.Stop(); 
                 int vkCode = Marshal.ReadInt32(lParam);
 
                 uint uCode = (uint)vkCode;
                 uint scanCode = MapVirtualKey(uCode, MAPVK_VK_TO_VSC);
 
-                for (int x = 0; x < layout.KeyLayout.Count; x++)
-                {
-                    if ((Keys)vkCode == layout.KeyLayout[x].CurrentKey)
-                    {
-                        layout.KeyLayout[x].DeActivate();
-                    }
-                }
-
-                if (Main.DEBUG) Console.WriteLine("KEY-UP   - vkCode: 0x{0}\tScan Code: 0x{3}\tKey: {1} in {2}ms", vkCode.ToString("X2"), (Keys)vkCode, 0, scanCode.ToString("X2"));
+                Console.WriteLine("KEY-UP   - vkCode: \u001b[33;1m0x{0}\u001b[0m\tScan Code: \u001b[33;1m0x{3}\u001b[0m\tKey: \u001b[33;1m{1}\u001b[0m in \u001b[32;1m{2}\u001b[0mms", vkCode.ToString("X2"), (Keys)vkCode, _keytimer.ElapsedMilliseconds, scanCode.ToString("X2"));
+                Console.WriteLine();
             }
 
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
         }
 
-        /// <summary>
-        /// Loads in a specific keyboard layout.
-        /// </summary>
-        private void KeyboardLoader()
-        {
-            foreach (Keyboards.SKey k in layout.KeyLayout)
-            {
-                if (Main.DEBUG) Console.WriteLine("Loading key: {0} @ POS {1} - SIZE: {2}", k.CurrentKey, k.KeyLocation.ToString(), k.KeySize);
-
-                // make the box for the key
-                k.PBKey = new PictureBox();
-                k.PBKey.Parent = pictureBox1;
-                k.PBKey.BackColor = Color.Transparent;
-                k.PBKey.Location = k.KeyLocation;
-                double KeyWidth = layout._1uKey.Width * k.KeySize;
-                k.PBKey.Size = new Size((int)KeyWidth, layout._1uKey.Height);
-            }
-        }
-
-        /// <summary>
-        /// If we should be monitoring all keys that have been pressed or not.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void cbMonitorKeys_CheckedChanged(object sender, EventArgs e)
-        {
-            Main.MONITOR = cbMonitorKeys.Checked;
-
-            if (!cbMonitorKeys.Checked)
-            {
-                if (MessageBox.Show("Would you like to clearn currently marked keys?", "Clear Keys?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    foreach (Keyboards.SKey k in layout.KeyLayout)
-                        k.DeActivate();
-                }
-            }
-        }
-
-        /// <summary>
-        /// The route out!
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnExit_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
     }
 }

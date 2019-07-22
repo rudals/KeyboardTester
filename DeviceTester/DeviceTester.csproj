@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2CAE5435-A279-49EC-B6F5-E4C567A4D220}</ProjectGuid>
+    <ProjectGuid>{98DBDFD7-B7C9-4435-BFC8-3B7B18336A78}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>KeyboardTester</RootNamespace>
-    <AssemblyName>KeyboardTester</AssemblyName>
+    <RootNamespace>DeviceTester</RootNamespace>
+    <AssemblyName>DeviceTester</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,7 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,32 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomCheckBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CustomCheckBox.Designer.cs">
-      <DependentUpon>CustomCheckBox.cs</DependentUpon>
-    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Keyboards\100Layout1.cs" />
-    <Compile Include="Keyboards\60Layout1.cs" />
-    <Compile Include="Keyboards\SKey.cs" />
-    <Compile Include="KeyCapture.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="InputDevice.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Theme\Billion.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Theme\NSTheme.cs" />
-    <EmbeddedResource Include="CustomCheckBox.resx">
-      <DependentUpon>CustomCheckBox.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -84,7 +66,6 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -98,21 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\greenImg.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\green.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\red.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\60-percent-keyboard-form-factor-min.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Full-size-keyboard-form-factor-min.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
