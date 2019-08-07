@@ -162,6 +162,9 @@ namespace KeyboardTester
                 txtScanCode.Text = "0x" + scanCode.ToString("X2");
 
                 if (Main.DEBUG) Console.WriteLine("KEY-DOWN - vkCode: 0x{0}\tScan Code: 0x{2}\tKey: {1}", vkCode.ToString("X2"), (Keys)vkCode, scanCode.ToString("X2"));
+
+                lbKeyOutput.Items.Add(string.Format("KEY-DOWN\tvkCode: 0x{0}\tScan Code: 0x{2}\tKey: {1}", vkCode.ToString("X2"), (Keys)vkCode, scanCode.ToString("X2")));
+                autoScrollListBox();
             }
 
             // Key Up Event
@@ -184,6 +187,9 @@ namespace KeyboardTester
                 }
 
                 if (Main.DEBUG) Console.WriteLine("KEY-UP   - vkCode: 0x{0}\tScan Code: 0x{3}\tKey: {1} in {2}ms", vkCode.ToString("X2"), (Keys)vkCode, 0, scanCode.ToString("X2"));
+
+                lbKeyOutput.Items.Add(string.Format("KEY-UP:\t\tvkCode: 0x{0}\tScan Code: 0x{3}\tKey: {1} in {2}ms", vkCode.ToString("X2"), (Keys)vkCode, _keytimer.ElapsedMilliseconds, scanCode.ToString("X2")));
+                autoScrollListBox();
             }
 
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
@@ -209,7 +215,7 @@ namespace KeyboardTester
         }
 
         /// <summary>
-        /// If we should be monitoring all keys that have been pressed or not.
+        /// If we should be monitoring all keys that have been pressed or not.  
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -235,6 +241,12 @@ namespace KeyboardTester
         private void btnExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void autoScrollListBox()
+        {
+            lbKeyOutput.SelectedIndex = lbKeyOutput.Items.Count - 1;
+            lbKeyOutput.SelectedIndex = -1;
         }
     }
 }

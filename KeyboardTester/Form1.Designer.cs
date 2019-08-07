@@ -32,6 +32,7 @@
             this.txtLastKey = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.txtPressedTime = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -40,12 +41,14 @@
             this.txtScanCode = new System.Windows.Forms.TextBox();
             this.txtCode = new System.Windows.Forms.TextBox();
             this.cbMonitorKeys = new KeyboardTester.CustomCheckBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.bullionTheme1 = new BullionTheme();
             this.btnExit = new BullionButton();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lbKeyOutput = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -66,7 +69,6 @@
             this.txtLastKey.ReadOnly = true;
             this.txtLastKey.Size = new System.Drawing.Size(85, 20);
             this.txtLastKey.TabIndex = 2;
-            //this.txtLastKey.TextChanged += new System.EventHandler(this.txtLastKeys_TextChanged);
             // 
             // groupBox1
             // 
@@ -105,6 +107,16 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1229, 52);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // label4
+            // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(477, 32);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(386, 13);
+            this.label4.TabIndex = 5;
+            this.label4.Text = "Press any key on your conected keyboard to get information on the key pressed.";
             // 
             // label5
             // 
@@ -184,16 +196,6 @@
             this.cbMonitorKeys.UseVisualStyleBackColor = true;
             this.cbMonitorKeys.CheckedChanged += new System.EventHandler(this.cbMonitorKeys_CheckedChanged);
             // 
-            // label4
-            // 
-            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(477, 32);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(386, 13);
-            this.label4.TabIndex = 5;
-            this.label4.Text = "Press any key on your conected keyboard to get information on the key pressed.";
-            // 
             // bullionTheme1
             // 
             this.bullionTheme1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -201,7 +203,7 @@
             this.bullionTheme1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.bullionTheme1.Location = new System.Drawing.Point(0, 0);
             this.bullionTheme1.Name = "bullionTheme1";
-            this.bullionTheme1.Size = new System.Drawing.Size(1259, 501);
+            this.bullionTheme1.Size = new System.Drawing.Size(1259, 683);
             this.bullionTheme1.TabIndex = 6;
             this.bullionTheme1.Text = "KeyTester ~ xor";
             // 
@@ -217,11 +219,31 @@
             this.btnExit.Text = "X";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.lbKeyOutput);
+            this.groupBox2.Location = new System.Drawing.Point(12, 495);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(1235, 176);
+            this.groupBox2.TabIndex = 8;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Output";
+            // 
+            // lbKeyOutput
+            // 
+            this.lbKeyOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbKeyOutput.FormattingEnabled = true;
+            this.lbKeyOutput.Location = new System.Drawing.Point(3, 16);
+            this.lbKeyOutput.Name = "lbKeyOutput";
+            this.lbKeyOutput.Size = new System.Drawing.Size(1229, 157);
+            this.lbKeyOutput.TabIndex = 0;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1259, 501);
+            this.ClientSize = new System.Drawing.Size(1259, 683);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.pictureBox1);
@@ -238,6 +260,7 @@
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -259,6 +282,8 @@
         private CustomCheckBox cbMonitorKeys;
         private BullionTheme bullionTheme1;
         private BullionButton btnExit;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.ListBox lbKeyOutput;
     }
 }
 
