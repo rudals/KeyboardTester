@@ -40,7 +40,7 @@ namespace KeyboardTester
         /// <summary>
         /// Keep the keys that have been pressed as GREEN
         /// </summary>
-        public static bool MONITOR = false;
+        public static bool MONITOR = true;
 
         /// <summary>
         /// Gets the .exe path.

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.txtLastKey = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -41,10 +42,10 @@
             this.txtScanCode = new System.Windows.Forms.TextBox();
             this.txtCode = new System.Windows.Forms.TextBox();
             this.cbMonitorKeys = new KeyboardTester.CustomCheckBox();
-            this.bullionTheme1 = new BullionTheme();
-            this.btnExit = new BullionButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.lbKeyOutput = new System.Windows.Forms.ListBox();
+            this.btnExit = new BullionButton();
+            this.bullionTheme1 = new BullionTheme();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -188,6 +189,9 @@
             // cbMonitorKeys
             // 
             this.cbMonitorKeys.AutoSize = true;
+            this.cbMonitorKeys.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.cbMonitorKeys.Checked = true;
+            this.cbMonitorKeys.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbMonitorKeys.Location = new System.Drawing.Point(477, 3);
             this.cbMonitorKeys.Name = "cbMonitorKeys";
             this.cbMonitorKeys.Size = new System.Drawing.Size(117, 17);
@@ -195,29 +199,6 @@
             this.cbMonitorKeys.Text = "Mark Pressed Keys";
             this.cbMonitorKeys.UseVisualStyleBackColor = true;
             this.cbMonitorKeys.CheckedChanged += new System.EventHandler(this.cbMonitorKeys_CheckedChanged);
-            // 
-            // bullionTheme1
-            // 
-            this.bullionTheme1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bullionTheme1.Font = new System.Drawing.Font("Verdana", 7F);
-            this.bullionTheme1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.bullionTheme1.Location = new System.Drawing.Point(0, 0);
-            this.bullionTheme1.Name = "bullionTheme1";
-            this.bullionTheme1.Size = new System.Drawing.Size(1259, 683);
-            this.bullionTheme1.TabIndex = 6;
-            this.bullionTheme1.Text = "KeyTester ~ xor";
-            // 
-            // btnExit
-            // 
-            this.btnExit.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExit.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnExit.Image = null;
-            this.btnExit.Location = new System.Drawing.Point(1233, 1);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(18, 18);
-            this.btnExit.TabIndex = 7;
-            this.btnExit.Text = "X";
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // groupBox2
             // 
@@ -238,6 +219,29 @@
             this.lbKeyOutput.Size = new System.Drawing.Size(1229, 157);
             this.lbKeyOutput.TabIndex = 0;
             // 
+            // btnExit
+            // 
+            this.btnExit.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnExit.Image = null;
+            this.btnExit.Location = new System.Drawing.Point(1233, 1);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(18, 18);
+            this.btnExit.TabIndex = 7;
+            this.btnExit.Text = "X";
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
+            // bullionTheme1
+            // 
+            this.bullionTheme1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bullionTheme1.Font = new System.Drawing.Font("Verdana", 7F);
+            this.bullionTheme1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.bullionTheme1.Location = new System.Drawing.Point(0, 0);
+            this.bullionTheme1.Name = "bullionTheme1";
+            this.bullionTheme1.Size = new System.Drawing.Size(1259, 683);
+            this.bullionTheme1.TabIndex = 6;
+            this.bullionTheme1.Text = "KeyTester ~ xor";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -250,12 +254,12 @@
             this.Controls.Add(this.bullionTheme1);
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Key Tester - XOR";
-            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
